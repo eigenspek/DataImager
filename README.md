@@ -4,6 +4,8 @@ Contains the DataImager library to convert datasets into Images to use with Neur
 library : DataImager.py
 make sure to take a look at the 'howtouse.py'
 
+Be sure to create in the directory you work in, a folder named 'dataimages' with subfolders 'train' and 'test'
+
 The idea is to take a dataset and turn each object into an image that will feed a computer vision algorithm.
 
 for now, this only works with dataset in which each feature contains categories.
