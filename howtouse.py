@@ -90,17 +90,17 @@ print(Ximg[56]) # you can access one image like this
 # you need to provide both the train_set and test_set 
 
 # for equal widths for each feature : 
-Xi,Xti = di.datatoimg(X, Xtest,'1') 
+Xi,Xti = di.datatoimg(X, Xtest,wmode='1',savemode=True) 
 print(len(Xi),len(Xti))
 
 # if you want to use weighted widths for each feature : 
-Xi,Xti = di.datatoimg(X,Xtest,'w') 
+Xi,Xti = di.datatoimg(X,Xtest,wmode='w',savemode=True) 
 print(len(Xi),len(Xti)) 
 
 # note that Xi,Xti will be returned as numpy arrays. 
 print(Xi[42]) # to print image corresponding to object number 42. 
 
-
+# note : set savemode to False if you do not need to save images and just want to use returned arrays. 
 
 
 
