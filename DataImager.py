@@ -33,26 +33,27 @@ def transform_weights(l):
 	return pd.DataFrame(l)
 
 
-def datatoimg(X, Xt, mode='1'):
+def datatoimg(X, Xt, wmode='1',savemode=False):
 	""" Converts a dataset of type DataFrame to an ensemble of images. Please, pass X as type DataFrame. 
 	returns two numpy arrays each containing either train or test arrays of corresponding images. 
 	Modes : '1' is equal weight for each feature. 'w' each feature will have a width associated to its relative weight."""
 	features_number = X.shape[1]
 	img_height = getimgheight(X)
-	if mode == '1':
-		ximg,xtestimg = subdatatoimg(X,Xt,features_number,img_height,1)
-	elif mode == 'w':
+	if wmode == '1':
+		ximg,xtestimg = subdatatoimg(X,Xt,features_number,img_height,1,savemode)
+	elif wmode == 'w':
 		ft_weights = get_ft_weights(X)
 		ft_weights = pd.DataFrame(ft_weights)
 		img_subwidths = transform_weights(ft_weights)
-		ximg,xtestimg = subdatatoimg(X,Xt,features_number, img_height,img_subwidths)
+		ximg,xtestimg = subdatatoimg(X,Xt,features_number, img_height,img_subwidths, savemode)
 	else : 
 		print('###### Error in entered mode, please ensure mode = "1" or "w" ######')
 	return np.array(ximg), np.array(xtestimg)
 
-def subdatatoimg(X,Xt, features_number, img_height, widths):
+def subdatatoimg(X,Xt, features_number, img_height, widths,savemode):
 	""" Actually does the conversion into images, is called by datatoimg(). """
-	os.chdir(os.getcwd() + '/dataimages/train')
+	if savemode:
+		os.chdir(os.getcwd() + '/dataimages/train')
 	b = X.values
 	ximg = []
 	ximg = list(ximg)
@@ -64,11 +65,13 @@ def subdatatoimg(X,Xt, features_number, img_height, widths):
 		imgm = imgmatrix(a, features_number, img_height, widths)
 		title = i
 		ximg.append([imgm])
-		img = toimage(imgm)
-		img.save('%s.png' % str(title))
+		if savemode:		
+			saveimg(title,imgm)
 	print('Converted %d train data to images' % len(b))
-	os.chdir('../')
-	os.chdir(os.getcwd() + '/test')
+	if savemode:
+		os.chdir('../')
+		os.chdir(os.getcwd() + '/test')
+
 	c = Xt.values
 	for i in range(len(Xt.values)):
 		d = c[i]
@@ -76,12 +79,19 @@ def subdatatoimg(X,Xt, features_number, img_height, widths):
 		imgmt = imgmatrix(d, features_number, img_height, widths)
 		title = len(b) + i
 		xtestimg.append([imgmt])
-		img = toimage(imgmt)
-		img.save('%s.png' % str(title))
+		if savemode:
+			saveimg(title,imgmt)
 	print('Converted %d test data to images' % len(c))
-	os.chdir('../')
+	if savemode:
+		os.chdir('../')
+
 	return ximg,xtestimg
 #-------------------------------------------
+def saveimg(title,image):
+	""" function saving images in the dataimages folder"""
+	image = toimage(image)
+	image.save('%s.png' % str(title))
+
 
 def getimgheight(X):
 	""" searches in dataset all groups in each features and returns max(largest group of each features)  """
