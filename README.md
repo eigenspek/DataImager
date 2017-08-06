@@ -29,16 +29,18 @@ This is why the height of our image needs to correspond to the largest number of
 
 ( To generate the image examples, I used a dataset with 12 features and the largest number of categories was 11)
 
-using the *mode '1'* in di.datatoimg(X,Xtest,'1'):
+using the *mode '1'* in di.datatoimg(X,Xtest,wmode='1',savemode=True):
     each pixel column corresponds to a different feature. 
 Thus, we have an image of size : 'max_number_of_categories' x 'number_of_features' 
 you can see the result : *test_image_1.png* (12x12)
 
-using the *mode 'w'* in di.datatoimg(X,Xtest,'w'):
+using the *mode 'w'* in di.datatoimg(X,Xtest,wmode='w',savemode=True):
     each feature will have a given column width in the image.
 To calculate each feature's width, we create the covariance matrix and perform eigendecomposition, extract eigenvalues and normalize them to unit ( the same way you would do performing PCA ), assigning rounded eigenvalue to each feature, we have our widths. 
 you can see the result : *test_image_w.png* (100x12) 
 
+# Notes 
+Be aware that savemode is set to False by default.
 
 # improvements : 
 
